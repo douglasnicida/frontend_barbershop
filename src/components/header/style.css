@@ -1,0 +1,34 @@
+.headerContainer {
+    width: 100%;
+    height: 148px;
+
+    background-color: var(--purple);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 144px;
+}
+
+.logo {
+    color: white;
+    font-family: "Just Another Hand", cursive;
+    font-size: 48px;
+
+    cursor: pointer;
+}
+
+.logo:hover {
+    transform: scale(105%);
+    transition: all .3s linear;
+}
+
+.user-icon {
+    cursor: pointer;
+}
+
+.user-icon-content:hover {
+    background-color: blueviolet;
+    transition: all .2s ease-in-out;
+}
