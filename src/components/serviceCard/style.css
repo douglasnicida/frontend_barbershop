@@ -29,6 +29,13 @@
     color: var(--secondary-text);
 }
 
+.service-card-price {
+    width: fit-content;
+    background-color: var(--soft-blue);
+    color: white;
+    border-radius: 8px;
+}
+
 .service-card-see-more {
     width: 100%;
     display: flex;

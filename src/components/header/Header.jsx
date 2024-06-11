@@ -21,7 +21,7 @@ export default function Header() {
 
   return (
     <div className="headerContainer">
-      <h1 className="logo">YOURBARBER</h1>
+      <a href="/" className="logo">YOURBARBER</a>
 
       <Menu>
         <MenuButton>
