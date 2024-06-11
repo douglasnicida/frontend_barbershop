@@ -42,10 +42,12 @@ export default function Header() {
                         <LiaUserEditSolid size={20} />
                         Editar perfil
                     </MyMenuItem>
-                    <MyMenuItem>
-                        <IoCalendarOutline size={20}/>
-                        Meus agendamentos
-                    </MyMenuItem>
+                    <a href="/meus_agendamentos">
+                        <MyMenuItem>
+                            <IoCalendarOutline size={20}/>
+                            Meus agendamentos
+                        </MyMenuItem>
+                    </a>
                     <MyMenuItem>
                         <BsScissors size={20} />
                         Minhas barbearias

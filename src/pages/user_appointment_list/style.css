@@ -1,0 +1,38 @@
+.appointment-list {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.appointment-card-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 80%;
+}
+
+.appointment-card-box {
+    width: 100%;
+}
+
+.appointment-card-datetime {
+    color: var(--secondary-text);
+}
+
+.appointment-card-date,
+.appointment-card-time {
+    display: flex;
+    gap: 12px;
+}
+
+.appointment-card-date>span,
+.appointment-card-time>span{
+    font-weight: 600;
+}
+
+.appointment-card-footer {
+    width: 100%;
+    
+    display: flex;
+    justify-content: end;
+}
