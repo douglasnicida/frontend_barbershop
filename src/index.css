@@ -8,14 +8,14 @@
 
 :root {
   --purple: #3D0099;
+  --purple-hover: #6700ce;
   --soft-blue: #3F7CAC;
   --white-container: #F6F6F6;
+  --primary-text: #252B42;
+  --secondary-text: #737373;
 }
 
-.content-container {
+body {
   background-color: var(--white-container);
-  height: calc(100vh - 148px - 48px);
-  padding: 30px 144px;
-  overflow-y: auto;
-  overflow-x: hidden;
 }
+

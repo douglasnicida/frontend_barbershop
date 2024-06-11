@@ -1,0 +1,23 @@
+.barbershop-address {
+    font-size:  small;
+    font-weight: 300;
+    color: var(--secondary-text);
+}
+
+.barbershop-access {
+    background-color: var(--purple);
+    color: white;
+
+    transition: all .3s linear;
+}
+
+.barbershop-access:hover {
+    background-color: var(--purple-hover);
+}
+
+.card-footer-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
