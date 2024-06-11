@@ -1,8 +1,9 @@
-import { Container, IconButton, Input, InputGroup, InputRightAddon, Select, SimpleGrid } from '@chakra-ui/react';
+import { IconButton, Input, InputGroup, InputRightAddon, Select, SimpleGrid } from '@chakra-ui/react';
 import './App.css';
-import BarbershopCard from './components/card/Card';
+import BarbershopCard from './components/barbershopCard/Card';
 import { IoMdSearch } from 'react-icons/io';
 import HeadingContainer from './components/heading/Heading';
+import ContentContainer from './components/contentContainer/ContentContainer';
 
 export default function App() {
   const breadcrumbItems = [
@@ -40,10 +41,8 @@ export default function App() {
         </InputGroup>
       </HeadingContainer>
 
-      <Container className='home-content-container'>
-
-        <Container maxW={'6xl'} className='home-content'>
-          <SimpleGrid spacing={4} templateColumns='repeat(auto-fill, minmax(350px, 1fr))'>
+      <ContentContainer>
+        <SimpleGrid spacing={4} templateColumns='repeat(auto-fill, minmax(350px, 1fr))'>
             <BarbershopCard />
             <BarbershopCard />
             <BarbershopCard />
@@ -52,9 +51,7 @@ export default function App() {
             <BarbershopCard />
             <BarbershopCard />
           </SimpleGrid>
-        </Container>
-
-      </Container>
+      </ContentContainer>
     </>
   );
 }

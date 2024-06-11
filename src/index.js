@@ -7,9 +7,10 @@ import AppRoutes from './routes';
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
 
+// ensures styles are prepended to the <head>, instead of appended
 const emotionCache = createCache({
   key: 'emotion-css-cache',
-  prepend: true, // ensures styles are prepended to the <head>, instead of appended
+  prepend: true,
 });
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
