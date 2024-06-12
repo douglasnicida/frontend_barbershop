@@ -12,13 +12,17 @@ import { IoIosArrowForward } from "react-icons/io";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function BarbershopCard() {
+export default function BarbershopCard({from}) {
   const [clickedBarbershopId, setClickedBarbershopId] = useState('')
+
+  if(!from) {
+    from = ''
+  }
   
   const navigate = useNavigate();
 
   function handleCardClick() {
-    navigate(`/barbearia/${clickedBarbershopId}`)
+    navigate(`${from}/barbearia/${clickedBarbershopId}`)
   }
 
   return (

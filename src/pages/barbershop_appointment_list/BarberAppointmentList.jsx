@@ -42,7 +42,47 @@ function AppointmentCancelButton() {
         </AlertDialog>
       </>
     )
-  }
+}
+
+function AppointmentConcludedButton() {
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const cancelRef = useRef()
+
+  return (
+    <>
+      <Button colorScheme='green' onClick={onOpen}>
+        Concluído
+      </Button>
+
+      <AlertDialog
+        isOpen={isOpen}
+        leastDestructiveRef={cancelRef}
+        onClose={onClose}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+              Conclusão de Agendamento
+            </AlertDialogHeader>
+
+            <AlertDialogBody>
+              Confirmar que o serviço do agendamento foi concluído?
+            </AlertDialogBody>
+
+            <AlertDialogFooter>
+              <Button ref={cancelRef} onClick={onClose}>
+                Voltar
+              </Button>
+              <Button colorScheme='green' onClick={onClose} ml={3}>
+                Sim
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
+    </>
+  )
+}
 
 function AppointmentItem() {
     return (
@@ -60,9 +100,9 @@ function AppointmentItem() {
         <Stack className='appointment-card-box'>
             <CardBody className='appointment-card-info'>
                 <Box>
-                    <Heading size='lg'>Nome Barbearia</Heading>
+                    <Heading size='lg'>Nome Serviço</Heading>
                     <Text py='2'>
-                        Serviço
+                        Nome Cliente
                     </Text>
                 </Box>
 
@@ -74,19 +114,23 @@ function AppointmentItem() {
                     <Box className='appointment-card-time'>
                         <span>Hora:</span><Text>00:00</Text>
                     </Box>
+
                     <Tag marginTop={2} className='service-card-price'>R$20,00</Tag>
                 </Box>
+
+                
             </CardBody>
 
             <CardFooter className='appointment-card-footer'>
                 <AppointmentCancelButton />
+                <AppointmentConcludedButton />
             </CardFooter>
         </Stack>
         </Card>
     )
 }
 
-export default function UserAppointmentList() {
+export default function BarberAppointmentList() {
     const breadcrumbItems = [
         {
           page: 'Home',
@@ -95,15 +139,21 @@ export default function UserAppointmentList() {
         },
 
         {
-            page: 'Meus agendamentos',
-            url: `/meus_agendamentos`,
+            page: 'Minhas Barbearias',
+            url: `/minhas_barbearias`,
+            isCurrent: false
+        },
+
+        {
+            page: 'Barbearia',
+            url: `/barbearia`,
             isCurrent: true
-        }
+        },
       ]
 
     return (
         <>
-        <HeadingContainer breadcrumbItems={breadcrumbItems} title={'Meus Agendamentos'}>
+        <HeadingContainer breadcrumbItems={breadcrumbItems} title={'Agendamentos Barbearia'}>
         </HeadingContainer>
         <ContentContainer>
             <div className="appointment-list">
