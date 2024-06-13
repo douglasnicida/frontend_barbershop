@@ -1,16 +1,41 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import HeadingContainer from '../../components/heading/Heading'
 import './style.css'
 import ContentContainer from '../../components/contentContainer/ContentContainer';
 import { Heading, SimpleGrid, Text } from '@chakra-ui/react';
 import ServiceCard from '../../components/serviceCard/ServiceCard';
+import { useEffect, useState } from 'react';
+import axiosInstance from '../../utils/axiosConfig';
+import { toast } from 'react-toastify';
 const seeMoreText = 'Ver mais >>'
 
 
 export default function BarbershopDetails(){
+    const [barbershop, setBarbershop] = useState(null);
+    const [appointments, setAppointments] = useState(null);
     const { id } = useParams();
-    const barbershopName = 'Barbearia ' + id;
-    const breadcrumbItems = [
+    
+    const navigate = useNavigate();
+
+      useEffect(() => {
+        async function getBarbershop() {
+          let result = []
+    
+          try {
+            result = await axiosInstance.get(`/barbearias/${id}`);
+            setBarbershop(result.data);
+
+            result = await axiosInstance.get(`/barbearias/${id}/servicos`);
+            setAppointments(result.data._embedded.servicoes)
+          } catch(e) {
+            navigate('/not_found')
+          }
+        }
+    
+        getBarbershop()
+      }, [])
+
+      const breadcrumbItems = [
         {
           page: 'Home',
           url: '/',
@@ -18,7 +43,7 @@ export default function BarbershopDetails(){
         },
 
         {
-            page: barbershopName,
+            page: barbershop?.nomeBarbearia,
             url: `/barbearia/${id}`,
             isCurrent: true
         }
@@ -26,17 +51,25 @@ export default function BarbershopDetails(){
 
     return (
         <>
-        <HeadingContainer breadcrumbItems={breadcrumbItems} title={barbershopName}>
-            <h6 className='heading-details-address'>Endereço - Cidade, Estado</h6>
+        <HeadingContainer breadcrumbItems={breadcrumbItems} title={barbershop?.nomeBarbearia}>
+            <h6 className='heading-details-address'>{barbershop?.endereco}</h6>
         </HeadingContainer>
 
         <ContentContainer>
             <Heading className='service-card-service-title'>Serviços</Heading>
             <SimpleGrid spacing={4} templateColumns='repeat(auto-fill, minmax(270px, 1fr))'>
-                <ServiceCard />
-                <ServiceCard />
-                <ServiceCard />
-                <ServiceCard />
+
+                {
+                    (appointments.len > 0) ?
+                    appointments.map(appointment => {
+                        return (
+                            <ServiceCard key={appointment} appointment={appointment}/>
+                        )
+                    })
+                    :
+                    <Text>Esta barbearia ainda não possui serviços cadastrados.</Text>
+                }
+                
             </SimpleGrid>
             <a href="#" className='service-card-see-more'>{seeMoreText}</a>
             
@@ -46,7 +79,7 @@ export default function BarbershopDetails(){
                 <Text className='about-text'>
                     Descrição/Sobre/informações adicionais da barbearia
                 </Text>
-                <span className='about-owner-name'>Tomas Turbando</span>
+                <span className='about-owner-name'>Nome dono</span>
             </div>
         </ContentContainer>
         </>

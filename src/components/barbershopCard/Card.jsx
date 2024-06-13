@@ -9,20 +9,32 @@ import {
 } from "@chakra-ui/react";
 import "./style.css";
 import { IoIosArrowForward } from "react-icons/io";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function BarbershopCard({from}) {
-  const [clickedBarbershopId, setClickedBarbershopId] = useState('')
+export default function BarbershopCard({from, barbershop}) {
+  const [id, setId] = useState(-1);
+
+  useEffect(() => {
+    if(!barbershop?.id) {
+      const separatedLink= barbershop?._links.self.href.split('/')
+      const len = separatedLink?.length - 1
+  
+      setId(separatedLink[len])
+    } else {
+      setId(barbershop.id)
+    }
+  },[])
+
 
   if(!from) {
-    from = ''
+    from = "";
   }
   
   const navigate = useNavigate();
 
   function handleCardClick() {
-    navigate(`${from}/barbearia/${clickedBarbershopId}`)
+    navigate(`${from}/barbearia/${id}`)
   }
 
   return (
@@ -34,8 +46,8 @@ export default function BarbershopCard({from}) {
           borderRadius="lg"
         />
         <Stack mt="6" spacing="3">
-          <Heading size="md">Nome barbearia</Heading>
-          <p className="barbershop-address">Endereço - Cidade, Estado</p>
+          <Heading size="md">{barbershop.nomeBarbearia}</Heading>
+          <p className="barbershop-address">{barbershop.endereco}</p>
         </Stack>
       </CardBody>
 

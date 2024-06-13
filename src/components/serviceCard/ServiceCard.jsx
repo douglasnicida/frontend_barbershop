@@ -1,9 +1,9 @@
-import { IoIosArrowForward } from 'react-icons/io';
 import './style.css'
-import { Button, Card, CardFooter, Heading, Image, Stack, Tag, Text } from '@chakra-ui/react';
+import { Card, CardFooter, Heading, Image, Stack, Tag, Text } from '@chakra-ui/react';
 import AppointmentDrawer from '../appointment_create_drawer/AppointmentDrawer';
 
-export default function ServiceCard() {
+export default function ServiceCard({appointment}) {
+  console.log(appointment)
     return (
         <Card className='service-card' maxW={'sm'}>
             <Image
@@ -14,10 +14,10 @@ export default function ServiceCard() {
             <Stack mt="6" spacing="3" paddingX={5}>
                 
               <Heading size="sm" className='card-service-label'>Serviço</Heading>
-              <Heading size="md">Nome serviço</Heading>
-              <Text className='card-service-details'>Descrição Serviço</Text>
+              <Heading size="md">{appointment.nome}</Heading>
+              <Text className='card-service-details'>{appointment.descricao}</Text>
 
-              <Tag className='service-card-price'>R$20,00</Tag>
+              <Tag className='service-card-price'>R${appointment.preco},00</Tag>
             </Stack>
     
           <CardFooter>

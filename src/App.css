@@ -24,6 +24,7 @@
 
 .home-content-container {
     max-width: 100%;
+    min-height: calc(100vh - 108px - 48px - 210px);
     background-color: var(--white-container);
 }
 

@@ -4,8 +4,13 @@ import BarbershopCard from './components/barbershopCard/Card';
 import { IoMdSearch } from 'react-icons/io';
 import HeadingContainer from './components/heading/Heading';
 import ContentContainer from './components/contentContainer/ContentContainer';
+import { useEffect, useState } from 'react';
+import axiosInstance from './utils/axiosConfig';
+import { toast } from 'react-toastify';
 
 export default function App() {
+  const [barbershopsList, setBarbershopsList] = useState(null);
+  
   const breadcrumbItems = [
     {
       page: 'Home',
@@ -13,6 +18,26 @@ export default function App() {
       isCurrent: true
     }
   ]
+
+  useEffect(() => {
+    async function getBarbershops() {
+      try {
+        const response = await axiosInstance.get(`/barbearias`);
+        // Verifica se a resposta contém os dados esperados
+        if (response.data && response.data._embedded && response.data._embedded.barbearias) {
+          setBarbershopsList(response.data._embedded.barbearias);
+        } else {
+          toast.error('Erro inesperado ao obter lista de barbearias.');
+        }
+      } catch(error) {
+        console.error('Erro ao tentar obter barbearias:', error);
+        toast.error('Erro inesperado ao tentar obter barbearias.');
+      }
+    }
+
+    getBarbershops();
+  }, []);
+
 
   return (
     <>
@@ -43,13 +68,18 @@ export default function App() {
 
       <ContentContainer>
         <SimpleGrid spacing={4} templateColumns='repeat(auto-fill, minmax(350px, 1fr))'>
-            <BarbershopCard />
-            <BarbershopCard />
-            <BarbershopCard />
-            <BarbershopCard />
-            <BarbershopCard />
-            <BarbershopCard />
-            <BarbershopCard />
+            
+        {
+              (barbershopsList) ?
+              barbershopsList?.map((barbershopItem) => {
+                return (
+                  barbershopItem &&
+                  <BarbershopCard key={barbershopItem.endereco} barbershop={barbershopItem}/>
+                )
+              })
+              :
+              <h1>Nenhuma barbearia cadastrada.</h1>
+            }
           </SimpleGrid>
       </ContentContainer>
     </>
