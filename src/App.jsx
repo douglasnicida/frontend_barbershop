@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 
 export default function App() {
   const [barbershopsList, setBarbershopsList] = useState(null);
+  const [barbershopsListOriginal, setBarbershopsListOriginal] = useState(null);
   
   const breadcrumbItems = [
     {
@@ -26,6 +27,7 @@ export default function App() {
         // Verifica se a resposta contém os dados esperados
         if (response.data && response.data._embedded && response.data._embedded.barbearias) {
           setBarbershopsList(response.data._embedded.barbearias);
+          setBarbershopsListOriginal(response.data._embedded.barbearias);
         } else {
           toast.error('Erro inesperado ao obter lista de barbearias.');
         }
@@ -38,12 +40,30 @@ export default function App() {
     getBarbershops();
   }, []);
 
+  function handleBarbershopFilter() {
+    const filter = document.getElementById('searchBarbershopsHome').value;
+
+    if(filter === ''){
+      setBarbershopsList(barbershopsListOriginal)
+    } else {
+      const filteredBarbershopList = barbershopsListOriginal.filter(barbershop => barbershop.nomeBarbearia.includes(filter));
+
+      setBarbershopsList(filteredBarbershopList);
+    }
+  }
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleBarbershopFilter()
+    }
+  }
+
 
   return (
     <>
       <HeadingContainer breadcrumbItems={breadcrumbItems} title={'Barbearias'}>
         <InputGroup>
-          <Input placeholder='Buscar' className='heading-search-input'/>
+          <Input id='searchBarbershopsHome' placeholder='Buscar' className='heading-search-input' onKeyDown={handleKeyDown}/>
           <InputRightAddon className='heading-search-input-right-buttons'>
             <Select variant='filled' placeholder='Cidade'>
               <option value='option1'>Rio Claro</option>
@@ -61,6 +81,7 @@ export default function App() {
               aria-label='Buscar barbearias'
               icon={<IoMdSearch size={23} />}
               className='heading-search-icon'
+              onClick={handleBarbershopFilter}
             />
           </InputRightAddon>
         </InputGroup>
