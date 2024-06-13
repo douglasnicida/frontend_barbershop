@@ -117,7 +117,7 @@ export default function AppointmentDrawer({service}) {
               <Button variant='outline' mr={3} onClick={onClose}>
                 Cancel
               </Button>
-              <Button className='appointment-submit-button'>Submit</Button>
+              <Button className='appointment-submit-button'>Agendar</Button>
             </DrawerFooter>
           </DrawerContent>
         </Drawer>

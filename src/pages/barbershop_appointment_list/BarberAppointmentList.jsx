@@ -2,7 +2,9 @@ import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, Al
 import ContentContainer from '../../components/contentContainer/ContentContainer';
 import HeadingContainer from '../../components/heading/Heading';
 import './style.css';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import axiosInstance from '../../utils/axiosConfig';
 
 function AppointmentCancelButton() {
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -131,6 +133,11 @@ function AppointmentItem() {
 }
 
 export default function BarberAppointmentList() {
+    const [barbershop, setBarbershop] = useState(null);
+    const { id } = useParams();
+
+    const navigate = useNavigate();
+
     const breadcrumbItems = [
         {
           page: 'Home',
@@ -151,9 +158,22 @@ export default function BarberAppointmentList() {
         },
       ]
 
+      async function handleFindBarbershop() {
+        try {
+            await axiosInstance.get(`/barbearias/${id}`).then(result => {setBarbershop(result.data); console.log(result.data)})
+        } catch(e) {
+            console.log(e);
+        }
+      }
+    
+      useEffect(() => {
+        handleFindBarbershop()
+      }, [])
+
     return (
         <>
-        <HeadingContainer breadcrumbItems={breadcrumbItems} title={'Agendamentos Barbearia'}>
+        <HeadingContainer breadcrumbItems={breadcrumbItems} title={`Agendamentos ${barbershop?.nomeBarbearia}`}>
+          <Button colorScheme='purple' marginTop={2} onClick={() => {navigate(`/minhas_barbearias/barbearia/${id}/edit`)}}>Editar barbearia</Button>
         </HeadingContainer>
         <ContentContainer>
             <div className="appointment-list">

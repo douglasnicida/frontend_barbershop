@@ -12,42 +12,42 @@ const seeMoreText = 'Ver mais >>'
 
 export default function BarbershopDetails(){
     const [barbershop, setBarbershop] = useState(null);
-    const [appointments, setAppointments] = useState(null);
+    const [services, setServices] = useState(null);
     const { id } = useParams();
     
     const navigate = useNavigate();
 
-      useEffect(() => {
-        async function getBarbershop() {
-          let result = []
-    
-          try {
-            result = await axiosInstance.get(`/barbearias/${id}`);
-            setBarbershop(result.data);
+    useEffect(() => {
+      async function getBarbershop() {
+        let result = []
+  
+        try {
+          result = await axiosInstance.get(`/barbearias/${id}`);
+          setBarbershop(result.data);
 
-            result = await axiosInstance.get(`/barbearias/${id}/servicos`);
-            setAppointments(result.data._embedded.servicoes)
-          } catch(e) {
-            navigate('/not_found')
-          }
+          result = await axiosInstance.get(`/barbearias/${id}/servicos`);
+          setServices(result.data._embedded.servicoes)
+        } catch(e) {
+          navigate('/not_found')
         }
-    
-        getBarbershop()
-      }, [])
+      }
+  
+      getBarbershop()
+    }, [])
 
-      const breadcrumbItems = [
-        {
-          page: 'Home',
-          url: '/',
-          isCurrent: false
-        },
+    const breadcrumbItems = [
+      {
+        page: 'Home',
+        url: '/',
+        isCurrent: false
+      },
 
-        {
-            page: barbershop?.nomeBarbearia,
-            url: `/barbearia/${id}`,
-            isCurrent: true
-        }
-      ]
+      {
+          page: barbershop?.nomeBarbearia,
+          url: `/barbearia/${id}`,
+          isCurrent: true
+      }
+    ]
 
     return (
         <>
@@ -60,10 +60,10 @@ export default function BarbershopDetails(){
             <SimpleGrid spacing={4} templateColumns='repeat(auto-fill, minmax(270px, 1fr))'>
 
                 {
-                    (appointments.len > 0) ?
-                    appointments.map(appointment => {
+                    (services?.length > 0) ?
+                    services.map(service => {
                         return (
-                            <ServiceCard key={appointment} appointment={appointment}/>
+                            <ServiceCard key={service} service={service}/>
                         )
                     })
                     :

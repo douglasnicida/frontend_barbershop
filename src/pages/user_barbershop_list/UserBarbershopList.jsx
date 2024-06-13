@@ -3,7 +3,7 @@ import BarbershopCard from '../../components/barbershopCard/Card';
 import ContentContainer from '../../components/contentContainer/ContentContainer';
 import HeadingContainer from '../../components/heading/Heading';
 import './style.css';
-import { Button, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, SimpleGrid, useDisclosure } from '@chakra-ui/react';
+import { Button, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, SimpleGrid, Skeleton, Stack, useDisclosure } from '@chakra-ui/react';
 import { toast } from 'react-toastify';
 import axiosInstance from '../../utils/axiosConfig';
 
@@ -86,6 +86,7 @@ function CreateBarbershopButton() {
 
 export default function UserBarbershopList() {
   const [userBarbershops, setUserBarbershops] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const breadcrumbItems = [
     {
@@ -111,8 +112,10 @@ export default function UserBarbershopList() {
     }
 
     try {
+      setIsLoading(true);
       result = await axiosInstance.get(`/usuario/${user.data}/barbearias`);
       setUserBarbershops(result.data);
+      setIsLoading(false);
     } catch(e) {
         toast.error('Erro inesperado ao tentar criar barbearia.')
     }
@@ -128,10 +131,18 @@ export default function UserBarbershopList() {
       </HeadingContainer>
 
       <ContentContainer>
+        {
+          (isLoading) &&
+          <Stack>
+            <Skeleton height='20px' />
+            <Skeleton height='20px' />
+            <Skeleton height='20px' />
+          </Stack>
+        }
         <SimpleGrid spacing={4} templateColumns='repeat(auto-fill, minmax(350px, 1fr))'>
 
             {
-              (userBarbershops) ?
+              (userBarbershops && !isLoading) ?
               userBarbershops.map((barbershop) => {
                 return (
                   (barbershop) &&
@@ -139,6 +150,7 @@ export default function UserBarbershopList() {
                 )
               })
               :
+              !userBarbershops &&
               <h1>Nenhuma barbearia cadastrada.</h1>
             }
           </SimpleGrid>

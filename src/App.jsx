@@ -1,4 +1,4 @@
-import { IconButton, Input, InputGroup, InputRightAddon, Select, SimpleGrid } from '@chakra-ui/react';
+import { IconButton, Input, InputGroup, InputRightAddon, Select, SimpleGrid, Skeleton, Stack } from '@chakra-ui/react';
 import './App.css';
 import BarbershopCard from './components/barbershopCard/Card';
 import { IoMdSearch } from 'react-icons/io';
@@ -11,6 +11,7 @@ import { toast } from 'react-toastify';
 export default function App() {
   const [barbershopsList, setBarbershopsList] = useState(null);
   const [barbershopsListOriginal, setBarbershopsListOriginal] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   
   const breadcrumbItems = [
     {
@@ -23,11 +24,14 @@ export default function App() {
   useEffect(() => {
     async function getBarbershops() {
       try {
+        setIsLoading(true);
         const response = await axiosInstance.get(`/barbearias`);
         // Verifica se a resposta contém os dados esperados
         if (response.data && response.data._embedded && response.data._embedded.barbearias) {
           setBarbershopsList(response.data._embedded.barbearias);
           setBarbershopsListOriginal(response.data._embedded.barbearias);
+
+          setIsLoading(false);
         } else {
           toast.error('Erro inesperado ao obter lista de barbearias.');
         }
@@ -88,10 +92,18 @@ export default function App() {
       </HeadingContainer>
 
       <ContentContainer>
+        {
+          (isLoading) &&
+          <Stack>
+            <Skeleton height='20px' />
+            <Skeleton height='20px' />
+            <Skeleton height='20px' />
+          </Stack>
+        }
         <SimpleGrid spacing={4} templateColumns='repeat(auto-fill, minmax(350px, 1fr))'>
             
         {
-              (barbershopsList) ?
+              (barbershopsList && !isLoading) ?
               barbershopsList?.map((barbershopItem) => {
                 return (
                   barbershopItem &&
@@ -99,6 +111,7 @@ export default function App() {
                 )
               })
               :
+              barbershopsList &&
               <h1>Nenhuma barbearia cadastrada.</h1>
             }
           </SimpleGrid>

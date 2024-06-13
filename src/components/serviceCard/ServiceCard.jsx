@@ -2,8 +2,7 @@ import './style.css'
 import { Card, CardFooter, Heading, Image, Stack, Tag, Text } from '@chakra-ui/react';
 import AppointmentDrawer from '../appointment_create_drawer/AppointmentDrawer';
 
-export default function ServiceCard({appointment}) {
-  console.log(appointment)
+export default function ServiceCard({service}) {
     return (
         <Card className='service-card' maxW={'sm'}>
             <Image
@@ -14,10 +13,10 @@ export default function ServiceCard({appointment}) {
             <Stack mt="6" spacing="3" paddingX={5}>
                 
               <Heading size="sm" className='card-service-label'>Serviço</Heading>
-              <Heading size="md">{appointment.nome}</Heading>
-              <Text className='card-service-details'>{appointment.descricao}</Text>
+              <Heading size="md">{service.nome}</Heading>
+              <Text className='card-service-details'>{service.descricao}</Text>
 
-              <Tag className='service-card-price'>R${appointment.preco},00</Tag>
+              <Tag className='service-card-price'>R${service.preco},00</Tag>
             </Stack>
     
           <CardFooter>

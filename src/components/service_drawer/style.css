@@ -1,0 +1,51 @@
+
+
+.drawer-button {
+    background-color: var(--purple);
+    color: white;
+    width: 100%;
+}
+
+.drawer-button:hover {
+    background-color: var(--purple-hover);
+}
+
+.appointment-drawer {
+    background-color: var(--white-container);
+}
+
+.date-container, .time-container {
+    display: flex;
+    gap: 7px;
+}
+
+.time-container {
+    margin-top: 20px;
+}
+
+.date-container .box {
+    display: flex;
+    flex-direction: column;
+}
+
+.date-container .boxDay,
+.date-container .boxMonth {
+    flex: 1;
+}
+
+.date-container .boxYear {
+    flex: 2;
+}
+
+.appointment-input {
+    background-color: white;
+}
+
+.appointment-submit-button {
+    background-color: var(--purple-hover);
+    color: white;
+}
+
+.appointment-submit-button:hover {
+    background-color: var(--purple);
+}
