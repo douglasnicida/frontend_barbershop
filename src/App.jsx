@@ -7,6 +7,7 @@ import ContentContainer from './components/contentContainer/ContentContainer';
 import { useEffect, useState } from 'react';
 import axiosInstance from './utils/axiosConfig';
 import { toast } from 'react-toastify';
+import axios from 'axios';
 
 export default function App() {
   const [barbershopsList, setBarbershopsList] = useState(null);
@@ -25,11 +26,11 @@ export default function App() {
     async function getBarbershops() {
       try {
         setIsLoading(true);
-        const response = await axiosInstance.get(`/barbearias`);
+        const response = await axiosInstance.get(`/barbearia/`);
         // Verifica se a resposta contém os dados esperados
-        if (response.data && response.data._embedded && response.data._embedded.barbearias) {
-          setBarbershopsList(response.data._embedded.barbearias);
-          setBarbershopsListOriginal(response.data._embedded.barbearias);
+        if (response.data) {
+          setBarbershopsList(response.data);
+          setBarbershopsListOriginal(response.data);
 
           setIsLoading(false);
         } else {

@@ -53,11 +53,16 @@ export default function UserBarbershopEdit() {
         await axiosInstance.get(`/barbearias/${id}`).then(result => {
             const data = result.data;
             setBarbershop(data)
-            service = data._links.servicos.href.split('/');
         })
         setIsLoading(false);
-        const serviceAtt = await axiosInstance.get(`/${service[3]}/${service[4]}/${service[5]}`)
-        setServices(serviceAtt.data._embedded.servicoes)
+        
+    } catch(e) {
+        console.log(e);
+    }
+
+    try {
+        const serviceAtt = await axiosInstance.get(`/barbearia/${id}/servicos`)
+        setServices(serviceAtt.data)
         setIsLoadingService(false);
     } catch(e) {
         console.log(e);
@@ -73,9 +78,8 @@ export default function UserBarbershopEdit() {
         nameInput.value = barbershop.nomeBarbearia
         addressInput.value = barbershop.endereco
     }
-
     console.log(services)
-  }, [isLoading])
+  }, [isLoadingService])
 
   return (
     <>
@@ -103,10 +107,10 @@ export default function UserBarbershopEdit() {
 
             {
                 (!isLoadingService && services?.length > 0) ?
-                <SimpleGrid spacing={4} templateColumns='repeat(auto-fill, minmax(270px, 1fr))'>
+                <SimpleGrid spacing={4} templateColumns='repeat(auto-fill, minmax(270px, 1fr))' marginTop={10}>
                     {services?.map(service => {
                         return (
-                            <ServiceCard key={service} service={service} />
+                            <ServiceCard key={service} service={service} hasDeleteButton/>
                         )
                     })}
                 </SimpleGrid>
