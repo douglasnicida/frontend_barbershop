@@ -9,6 +9,7 @@ import { LiaUserEditSolid } from "react-icons/lia";
 import { PiSignOut } from "react-icons/pi";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 function MyMenuItem({children, onClick}) {
     return (
@@ -170,6 +171,8 @@ function SignUpModal() {
 
 export default function Header() {
     const [isLogged, setIsLogged] = useState(false);
+    const navigate = useNavigate();
+
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -216,7 +219,7 @@ export default function Header() {
                             Minhas barbearias
                         </MyMenuItem>
                     </a>
-                    <MyMenuItem onClick={()=>{localStorage.removeItem("token"); setIsLogged(false); toast.success("Desconectado com sucesso!");}}>
+                    <MyMenuItem onClick={()=>{localStorage.removeItem("token"); setIsLogged(false); toast.success("Desconectado com sucesso!"); navigate('/')}}>
                         <PiSignOut size={20} />
                         Sair
                     </MyMenuItem>

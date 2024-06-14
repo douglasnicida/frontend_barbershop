@@ -9,6 +9,8 @@ import ServiceDrawer from "../../components/service_drawer/ServiceDrawer";
 
 import './style.css'
 
+
+
 export default function UserBarbershopEdit() {
   const { id }  = useParams();
 
@@ -78,7 +80,6 @@ export default function UserBarbershopEdit() {
         nameInput.value = barbershop.nomeBarbearia
         addressInput.value = barbershop.endereco
     }
-    console.log(services)
   }, [isLoadingService])
 
   return (
