@@ -1,4 +1,4 @@
-import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Card, CardBody, CardFooter, Heading, Image, Stack, Tag, Text, useDisclosure } from '@chakra-ui/react';
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Card, CardBody, CardFooter, Heading, Image, SimpleGrid, Skeleton, Stack, Tag, Text, useDisclosure } from '@chakra-ui/react';
 import ContentContainer from '../../components/contentContainer/ContentContainer';
 import HeadingContainer from '../../components/heading/Heading';
 import './style.css';
@@ -87,7 +87,38 @@ function AppointmentConcludedButton() {
   )
 }
 
-function AppointmentItem() {
+function AppointmentItem({appointment}) {
+    const [date, setDate] = useState(null);
+    const [time, setTime] = useState(null);
+
+    
+    async function handleGetService() {
+      try {
+        
+      } catch(e) {
+        
+      }
+    }
+    
+    function doubleDigits(value) {
+      return (value < 10) ? `0${value}` : value;
+    }
+    
+    useEffect(() => {
+      const date = new Date(appointment?.data);
+      
+      const hora = doubleDigits(date.getHours());
+      const minutos = doubleDigits(date.getMinutes());
+      const dia = doubleDigits(date.getDay());
+      const mes = doubleDigits(date.getMonth());
+      const ano = doubleDigits(date.getFullYear());
+      
+      setDate(`${dia}/${mes}/${ano}`);
+      setTime(`${hora}:${minutos}`);
+
+      console.log(appointment)
+    }, [])
+
     return (
         <Card
         direction={{ base: 'column', sm: 'row' }}
@@ -100,22 +131,24 @@ function AppointmentItem() {
             alt='Caffe Latte'
         />
 
+        {/* TODO: colocar nome e preco do serviço e mudar la no banco para permitir agendamento com apenas 1 serviço */}
+
         <Stack className='appointment-card-box'>
             <CardBody className='appointment-card-info'>
                 <Box>
                     <Heading size='lg'>Nome Serviço</Heading>
                     <Text py='2'>
-                        Nome Cliente
+                        {appointment?.usuario?.nome}
                     </Text>
                 </Box>
 
                 <Box className='appointment-card-datetime'>
                     <Box className='appointment-card-date'>
-                        <span>Data:</span><Text>00/00/0000</Text>
+                        <span>Data:</span><Text>{date}</Text>
                     </Box>
 
                     <Box className='appointment-card-time'>
-                        <span>Hora:</span><Text>00:00</Text>
+                        <span>Hora:</span><Text>{time}</Text>
                     </Box>
 
                     <Tag marginTop={2} className='service-card-price'>R$20,00</Tag>
@@ -140,15 +173,15 @@ function DeleteBarbershopButton({id}) {
   const navigate = useNavigate();
 
   async function handleDeleteBarbershop() {
-      try {
-        await axiosInstance.delete(`/barbearia/${id}`)
-        toast.success('Barbearia foi excluída com sucesso')
-        setTimeout(() => {navigate('/minhas_barbearias')}, 2000)
-        onClose();
-      } catch(e) {
-        toast.error('Falha ao tentar excluir a barbearia.');
-      }
+    try {
+      await axiosInstance.delete(`/barbearia/${id}`)
+      toast.success('Barbearia foi excluída com sucesso')
+      setTimeout(() => {navigate('/minhas_barbearias')}, 2000)
+      onClose();
+    } catch(e) {
+      toast.error('Falha ao tentar excluir a barbearia.');
     }
+  }
     
     
 
@@ -190,6 +223,8 @@ function DeleteBarbershopButton({id}) {
 
 export default function BarberAppointmentList() {
     const [barbershop, setBarbershop] = useState(null);
+    const [appointments, setAppointments] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
     const { id } = useParams();
 
     const navigate = useNavigate();
@@ -216,7 +251,16 @@ export default function BarberAppointmentList() {
 
       async function handleFindBarbershop() {
         try {
-            await axiosInstance.get(`/barbearias/${id}`).then(result => {setBarbershop(result.data); console.log(result.data)})
+            await axiosInstance.get(`/barbearias/${id}`).then(result => {setBarbershop(result.data);})
+        } catch(e) {
+            console.log(e);
+        }
+      }
+
+      async function handleGetAppointments() {
+        try {
+          await axiosInstance.get(`/agendamento/barbearia/${id}`).then(result => {setAppointments(result.data);})
+          setIsLoading(false);
         } catch(e) {
             console.log(e);
         }
@@ -224,6 +268,8 @@ export default function BarberAppointmentList() {
     
       useEffect(() => {
         handleFindBarbershop()
+        handleGetAppointments()
+
       }, [])
 
     return (
@@ -236,9 +282,30 @@ export default function BarberAppointmentList() {
         </HeadingContainer>
         <ContentContainer>
             <div className="appointment-list">
-                <AppointmentItem />
-                <AppointmentItem />
-                <AppointmentItem />
+            {
+              (isLoading) &&
+              <Stack>
+                <Skeleton height='20px' />
+                <Skeleton height='20px' />
+                <Skeleton height='20px' />
+              </Stack>
+            }
+
+
+              {
+                (appointments && !isLoading) ?
+                appointments.map((appointment) => {
+                  return (
+                    (appointment) &&
+                    <AppointmentItem key={appointment.id} appointment={appointment}/>
+                  )
+                })
+                :
+                !appointments &&
+                <h1>Nenhuma agendamento para mostrar</h1>
+              }
+
+                
             </div>
         </ContentContainer>
         </>
