@@ -1,12 +1,25 @@
-import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Card, CardBody, CardFooter, Heading, Image, Stack, Tag, Text, useDisclosure } from '@chakra-ui/react';
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Card, CardBody, CardFooter, Heading, Image, Skeleton, Stack, Tag, Text, useDisclosure } from '@chakra-ui/react';
 import ContentContainer from '../../components/contentContainer/ContentContainer';
 import HeadingContainer from '../../components/heading/Heading';
 import './style.css';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import axiosInstance from '../../utils/axiosConfig';
+import { toast } from 'react-toastify';
 
-function AppointmentCancelButton() {
+function AppointmentCancelButton({appointmentID}) {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const cancelRef = useRef()
+
+    async function handleDeleteAppointment() {
+      try {
+        await axiosInstance.delete(`/agendamento/${appointmentID}`);
+        toast.success('Agendamento cancelado com sucesso!');
+        onClose();
+        setTimeout(window.location.reload(),2000)
+      } catch (e){
+        toast.error('Não foi possível cancelar este agendamento!');
+      }
+    }
   
     return (
       <>
@@ -33,8 +46,8 @@ function AppointmentCancelButton() {
                 <Button ref={cancelRef} onClick={onClose}>
                   Voltar
                 </Button>
-                <Button colorScheme='red' onClick={onClose} ml={3}>
-                  Sim
+                <Button colorScheme='red' onClick={handleDeleteAppointment} ml={3}>
+                  Confirmar
                 </Button>
               </AlertDialogFooter>
             </AlertDialogContent>
@@ -44,7 +57,27 @@ function AppointmentCancelButton() {
     )
   }
 
-function AppointmentItem() {
+function AppointmentItem({appointment}) {
+    const nomeBarbeariaAgendamento = appointment?.barbearia.nomeBarbearia;
+    const nomeServicoAgendamento = appointment?.servico.nome;
+    const precoServicoAgendamento = appointment?.servico.preco;
+    let dataAgendamento = 0;
+    let timeAgendamento = 0;
+    
+    const date = new Date(appointment?.data);
+    function doubleDigits(value) {
+      return (value < 10) ? `0${value}` : value;
+    }
+    const hora = doubleDigits(date.getHours());
+    const minutos = doubleDigits(date.getMinutes());
+    const dia = doubleDigits(date.getDay());
+    const mes = doubleDigits(date.getMonth());
+    const ano = doubleDigits(date.getFullYear());
+      
+    
+    dataAgendamento = `${dia}/${mes}/${ano}`;
+    timeAgendamento = `${hora}:${minutos}`;
+
     return (
         <Card
         direction={{ base: 'column', sm: 'row' }}
@@ -60,26 +93,26 @@ function AppointmentItem() {
         <Stack className='appointment-card-box'>
             <CardBody className='appointment-card-info'>
                 <Box>
-                    <Heading size='lg'>Nome Barbearia</Heading>
+                    <Heading size='lg'>{nomeBarbeariaAgendamento}</Heading>
                     <Text py='2'>
-                        Serviço
+                        {nomeServicoAgendamento}
                     </Text>
                 </Box>
 
                 <Box className='appointment-card-datetime'>
                     <Box className='appointment-card-date'>
-                        <span>Data:</span><Text>00/00/0000</Text>
+                        <span>Data:</span><Text>{dataAgendamento}</Text>
                     </Box>
 
                     <Box className='appointment-card-time'>
-                        <span>Hora:</span><Text>00:00</Text>
+                        <span>Hora:</span><Text>{timeAgendamento}</Text>
                     </Box>
-                    <Tag marginTop={2} className='service-card-price'>R$20,00</Tag>
+                    <Tag marginTop={2} className='service-card-price'>R${precoServicoAgendamento}</Tag>
                 </Box>
             </CardBody>
 
             <CardFooter className='appointment-card-footer'>
-                <AppointmentCancelButton />
+                <AppointmentCancelButton appointmentID={appointment?.id}/>
             </CardFooter>
         </Stack>
         </Card>
@@ -87,6 +120,10 @@ function AppointmentItem() {
 }
 
 export default function UserAppointmentList() {
+    const [appointments, setAppointments] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    let user = -1;
+
     const breadcrumbItems = [
         {
           page: 'Home',
@@ -101,15 +138,56 @@ export default function UserAppointmentList() {
         }
       ]
 
+      async function handleGetAppointments() {
+        try{
+          user = await axiosInstance.get('/usuario/minha_conta');
+        } catch(e) {
+          toast.error('Erro inesperado ao buscar seus agendamentos.')
+          console.log(e);
+        }
+
+        try {
+          axiosInstance.get(`/usuario/${user.data}/agendamentos`).then(result => setAppointments(result.data))
+          setIsLoading(false);
+        } catch(e) {
+          toast.error('Não foi possível buscar seus agendamentos.')
+          console.log(e);
+        }
+      }
+
+      useEffect(() => {
+        handleGetAppointments();
+      }, [])
+
     return (
         <>
         <HeadingContainer breadcrumbItems={breadcrumbItems} title={'Meus Agendamentos'}>
         </HeadingContainer>
         <ContentContainer>
             <div className="appointment-list">
-                <AppointmentItem />
-                <AppointmentItem />
-                <AppointmentItem />
+
+            {
+              (isLoading) &&
+              <Stack>
+                <Skeleton height='20px' />
+                <Skeleton height='20px' />
+                <Skeleton height='20px' />
+              </Stack>
+            }
+
+            {
+              (appointments && !isLoading) ?
+              appointments.map((appointment) => {
+                return (
+                  (appointment) &&
+                  <AppointmentItem key={appointment?.id} appointment={appointment} />
+                )
+              })
+              :
+              !appointments &&
+              <h1>Nenhum agendamento realizado.</h1>
+            }
+                
             </div>
         </ContentContainer>
         </>
