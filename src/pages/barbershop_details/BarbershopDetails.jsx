@@ -25,8 +25,8 @@ export default function BarbershopDetails(){
           result = await axiosInstance.get(`/barbearias/${id}`);
           setBarbershop(result.data);
 
-          result = await axiosInstance.get(`/barbearias/${id}/servicos`);
-          setServices(result.data._embedded.servicoes)
+          result = await axiosInstance.get(`/barbearia/${id}/servicos`);
+          setServices(result.data)
         } catch(e) {
           navigate('/not_found')
         }

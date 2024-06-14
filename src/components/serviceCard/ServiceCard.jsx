@@ -75,7 +75,7 @@ export default function ServiceCard({service, hasDeleteButton}) {
     
           <CardFooter>
             <div className="card-footer-container">
-              <AppointmentDrawer />
+              <AppointmentDrawer service={service}/>
             </div>
           </CardFooter>
         </Card>

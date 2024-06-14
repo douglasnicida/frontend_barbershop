@@ -21,7 +21,8 @@ function CreateBarbershopButton() {
       try {
         user = await axiosInstance.get('/usuario/minha_conta');
       } catch(e) {
-          toast.error('Erro inesperado ao tentar criar barbearia.')
+        toast.error('Erro inesperado ao tentar criar barbearia.')
+        console.log(e)
       }
 
 

@@ -3,12 +3,18 @@ import './style.css'
 import { Box, Button, Divider, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormLabel, Input, InputGroup, InputLeftAddon, InputRightAddon, Select, Stack, Textarea, useDisclosure } from "@chakra-ui/react"
 import { useRef, useState } from "react"
 import { IoIosArrowForward } from "react-icons/io"
+import axiosInstance from '../../utils/axiosConfig'
+import { toast } from 'react-toastify'
+import { useParams } from 'react-router-dom'
+import axios from 'axios'
 
 export default function AppointmentDrawer({service}) {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const firstField = useRef()
 
-    const [chosenDate, setChosenDate] = useState('')
+    const { id } = useParams();
+
+    const [chosenDate, setChosenDate] = useState(null)
 
     function handleDateTimeChange(e) {
       const result = e.target.value.toString()
@@ -39,11 +45,41 @@ export default function AppointmentDrawer({service}) {
       inputHour.value = hour
       inputMinutes.value = minutes
 
-      setChosenDate(`${day}-${month}-${year} ${hour}:${minutes}`)
+      setChosenDate(`${year}-${month}-${day}T${hour}:${minutes}:00`);
     }
 
-    function handleSubmit() {
+    async function handleSubmit() {
+      let user = 0;
+      const barbershop_id = (+id);
+      const dateTime = chosenDate;
+    
+      try {
+        user = await axiosInstance.get('/usuario/minha_conta');
+      } catch(e) {
+          toast.error('Erro inesperado ao tentar criar barbearia.')
+          console.log(e)
+      }
+      
+      if(!user || !barbershop_id || !dateTime || !service?.id){
+        toast.error('Há campos obrigatórios não preenchidos.')
+      }
 
+      const body = {
+        "id": "",
+        "data": dateTime,
+        "usuario_id": user.data,
+        "servico_id": service?.id,
+        "barbearia_id": barbershop_id
+      }
+
+      try {
+        await axiosInstance.post('/agendamento/', body);
+        toast.success(`${service?.nome} agendado com sucesso!`)
+        onClose();
+      } catch(e) {
+        toast.error('Erro inesperado ao tentar criar agendamento.')
+        console.log(e)
+      }
     }
 
     return (
@@ -117,7 +153,7 @@ export default function AppointmentDrawer({service}) {
               <Button variant='outline' mr={3} onClick={onClose}>
                 Cancel
               </Button>
-              <Button className='appointment-submit-button'>Agendar</Button>
+              <Button className='appointment-submit-button' onClick={handleSubmit}>Agendar</Button>
             </DrawerFooter>
           </DrawerContent>
         </Drawer>

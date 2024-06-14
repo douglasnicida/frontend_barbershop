@@ -116,8 +116,10 @@ function SignUpModal() {
 
         try {
             await axios.post('http://localhost:8080/auth/register',body);
+            toast.success('Cadastro realizado com sucesso!')
             onClose();
         } catch(e) {
+            toast.error('Erro inesperado ocorreu durante o processo de cadastro. Por favor tente novamente.')
             console.log(e)
         }
     }

@@ -7,7 +7,6 @@ import ContentContainer from './components/contentContainer/ContentContainer';
 import { useEffect, useState } from 'react';
 import axiosInstance from './utils/axiosConfig';
 import { toast } from 'react-toastify';
-import axios from 'axios';
 
 export default function App() {
   const [barbershopsList, setBarbershopsList] = useState(null);
@@ -104,7 +103,7 @@ export default function App() {
         <SimpleGrid spacing={4} templateColumns='repeat(auto-fill, minmax(350px, 1fr))'>
             
         {
-              (barbershopsList && !isLoading) ?
+              (barbershopsList?.length > 0 && !isLoading) ?
               barbershopsList?.map((barbershopItem) => {
                 return (
                   barbershopItem &&
@@ -112,7 +111,6 @@ export default function App() {
                 )
               })
               :
-              barbershopsList &&
               <h1>Nenhuma barbearia cadastrada.</h1>
             }
           </SimpleGrid>
