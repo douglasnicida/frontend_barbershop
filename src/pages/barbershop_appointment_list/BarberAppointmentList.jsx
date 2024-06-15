@@ -1,4 +1,4 @@
-import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Card, CardBody, CardFooter, Heading, Image, SimpleGrid, Skeleton, Stack, Tag, Text, useDisclosure } from '@chakra-ui/react';
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Card, CardBody, CardFooter, Heading, Image, Skeleton, Stack, Tag, Text, useDisclosure } from '@chakra-ui/react';
 import ContentContainer from '../../components/contentContainer/ContentContainer';
 import HeadingContainer from '../../components/heading/Heading';
 import './style.css';
@@ -91,15 +91,6 @@ function AppointmentItem({appointment}) {
     const [date, setDate] = useState(null);
     const [time, setTime] = useState(null);
 
-    
-    async function handleGetService() {
-      try {
-        
-      } catch(e) {
-        
-      }
-    }
-    
     function doubleDigits(value) {
       return (value < 10) ? `0${value}` : value;
     }
@@ -116,7 +107,6 @@ function AppointmentItem({appointment}) {
       setDate(`${dia}/${mes}/${ano}`);
       setTime(`${hora}:${minutos}`);
 
-      console.log(appointment)
     }, [])
 
     return (
@@ -131,13 +121,12 @@ function AppointmentItem({appointment}) {
             alt='Caffe Latte'
         />
 
-        {/* TODO: colocar nome e preco do serviço e mudar la no banco para permitir agendamento com apenas 1 serviço */}
-
         <Stack className='appointment-card-box'>
             <CardBody className='appointment-card-info'>
                 <Box>
                     <Heading size='lg'>Nome Serviço</Heading>
                     <Text py='2'>
+                      {/* TODO: tentar arrumar erro de não adicionar nome ao cadastrar usuário */}
                         {appointment?.usuario?.nome}
                     </Text>
                 </Box>

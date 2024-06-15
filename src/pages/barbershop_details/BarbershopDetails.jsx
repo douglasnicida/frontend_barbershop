@@ -6,7 +6,6 @@ import { Heading, SimpleGrid, Text } from '@chakra-ui/react';
 import ServiceCard from '../../components/serviceCard/ServiceCard';
 import { useEffect, useState } from 'react';
 import axiosInstance from '../../utils/axiosConfig';
-import { toast } from 'react-toastify';
 const seeMoreText = 'Ver mais >>'
 
 

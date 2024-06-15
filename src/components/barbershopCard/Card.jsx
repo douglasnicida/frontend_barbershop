@@ -11,6 +11,7 @@ import "./style.css";
 import { IoIosArrowForward } from "react-icons/io";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function BarbershopCard({from, barbershop}) {
   const [id, setId] = useState(-1);
@@ -34,7 +35,11 @@ export default function BarbershopCard({from, barbershop}) {
   const navigate = useNavigate();
 
   function handleCardClick() {
-    navigate(`${from}/barbearia/${id}`)
+    if(localStorage.getItem('token')){
+      navigate(`${from}/barbearia/${id}`)
+    } else {
+      toast.warn("Necessário estar logado para ter acesso às outras páginas.")
+    }
   }
 
   return (

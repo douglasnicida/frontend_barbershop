@@ -1,21 +1,23 @@
-import { Box, FormControl, FormLabel, Heading, Input, SimpleGrid, Text } from "@chakra-ui/react";
+import { Box, Button, FormControl, FormLabel, Heading, Input, SimpleGrid, Text, Tooltip } from "@chakra-ui/react";
 import ContentContainer from "../../components/contentContainer/ContentContainer";
 import HeadingContainer from "../../components/heading/Heading";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axiosInstance from "../../utils/axiosConfig";
 import ServiceCard from "../../components/serviceCard/ServiceCard";
 import ServiceDrawer from "../../components/service_drawer/ServiceDrawer";
 
 import './style.css'
+import { toast } from "react-toastify";
 
 
 
 export default function UserBarbershopEdit() {
   const { id }  = useParams();
 
+  const navigate = useNavigate();
+
   const [barbershop, setBarbershop] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [isLoadingService, setIsLoadingService] = useState(true);
   const [services, setServices] = useState([]);
 
@@ -50,13 +52,10 @@ export default function UserBarbershopEdit() {
 
   async function handleFindBarbershop() {
     try {
-        let service = []
-        setIsLoading(true);
-        await axiosInstance.get(`/barbearias/${id}`).then(result => {
+        await axiosInstance.get(`/barbearia/${id}`).then(result => {
             const data = result.data;
             setBarbershop(data)
         })
-        setIsLoading(false);
         
     } catch(e) {
         console.log(e);
@@ -71,6 +70,39 @@ export default function UserBarbershopEdit() {
     }
   }
 
+  async function handleUpdateBarbershop() {
+    const newName = nameInput.value;
+    const newAddress = addressInput.value;
+
+    if(newName === '' || newAddress === ''){
+      toast.error('Existem campos obrigatórios não preenchidos');
+      return;
+    }
+
+    if (newName === barbershop?.nomeBarbearia && newAddress === barbershop?.endereco) {
+      toast.warn('Nome e barbearia se mantiveram iguais.');
+      setTimeout(navigate(`/minhas_barbearias/barbearia/${id}`), 2000);
+      return;
+    }
+    
+
+    const body = {
+      "id": id,
+      "nomeBarbearia": newName,
+      "endereco": newAddress
+    }
+
+    try {
+      await axiosInstance.put('/barbearia/', body);
+      toast.success('Barbearia modificada com sucesso!');
+      setTimeout(navigate(`/minhas_barbearias/barbearia/${id}`), 2000);
+    } catch(e) {
+      toast.error('Erro ao editar barbearia, tente novamente!');
+      console.log(e);
+    }
+  }
+
+// TODO: fazer requisição para editar barbearia
   useEffect(() => {
     handleFindBarbershop()
   }, [])
@@ -87,7 +119,12 @@ export default function UserBarbershopEdit() {
       <HeadingContainer
         breadcrumbItems={breadcrumbItems}
         title={`Editar ${barbershop?.nomeBarbearia}`}
-      ></HeadingContainer>
+      >
+        <Tooltip label='Este botão consolidará apenas a ação de edição do nome e do endereço da barbearia. 
+        As ações dos serviços já são consolidados logo após a ação!' padding={4} borderRadius={10}>
+          <Button colorScheme='purple' onClick={handleUpdateBarbershop}>Concluir edição</Button>
+        </Tooltip>
+      </HeadingContainer>
 
       <ContentContainer>
         <FormControl>

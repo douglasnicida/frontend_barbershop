@@ -1,7 +1,7 @@
 import './style.css'
 
-import { Box, Button, Divider, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormControl, FormLabel, Input, InputGroup, InputLeftAddon, InputRightAddon, Select, Stack, Textarea, useDisclosure } from "@chakra-ui/react"
-import { useRef, useState } from "react"
+import { Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormControl, FormLabel, Input, Stack, Textarea, useDisclosure } from "@chakra-ui/react"
+import { useRef } from "react"
 import { IoIosArrowForward } from "react-icons/io"
 import { useParams } from 'react-router-dom'
 import axiosInstance from '../../utils/axiosConfig'

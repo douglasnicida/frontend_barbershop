@@ -1,12 +1,11 @@
 import './style.css'
 
-import { Box, Button, Divider, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormLabel, Input, InputGroup, InputLeftAddon, InputRightAddon, Select, Stack, Textarea, useDisclosure } from "@chakra-ui/react"
+import { Box, Button, Divider, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormLabel, Input, InputGroup, Stack, useDisclosure } from "@chakra-ui/react"
 import { useRef, useState } from "react"
 import { IoIosArrowForward } from "react-icons/io"
 import axiosInstance from '../../utils/axiosConfig'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
-import axios from 'axios'
 
 export default function AppointmentDrawer({service}) {
     const { isOpen, onOpen, onClose } = useDisclosure()
