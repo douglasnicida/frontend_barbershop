@@ -64,15 +64,32 @@ function AppointmentItem({appointment}) {
     let dataAgendamento = 0;
     let timeAgendamento = 0;
     
-    const date = new Date(appointment?.data);
-    function doubleDigits(value) {
-      return (value < 10) ? `0${value}` : value;
-    }
-    const hora = doubleDigits(date.getHours());
-    const minutos = doubleDigits(date.getMinutes());
-    const dia = doubleDigits(date.getDay());
-    const mes = doubleDigits(date.getMonth());
-    const ano = doubleDigits(date.getFullYear());
+    const data_string = new Date(appointment?.data).toUTCString();
+    
+    const date = new Date(data_string);
+
+    const options = {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+      timeZone: 'UTC'
+    };
+  
+    const formattedDate = new Intl.DateTimeFormat('pt-BR', options).format(date);
+
+    const data_split = formattedDate.split(', ');
+    const data_att = data_split[0].split('/')
+    const dia = data_att[0]
+    const mes = data_att[1]
+    const ano = data_att[2]
+    
+    const data_att2 = data_split[1].split(':')
+    const hora = data_att2[0]
+    const minutos = data_att2[1]
       
     
     dataAgendamento = `${dia}/${mes}/${ano}`;

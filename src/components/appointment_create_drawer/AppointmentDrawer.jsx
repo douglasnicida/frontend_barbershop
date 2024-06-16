@@ -16,6 +16,7 @@ export default function AppointmentDrawer({service}) {
     const [chosenDate, setChosenDate] = useState(null)
 
     function handleDateTimeChange(e) {
+      setChosenDate(new Date())
       const result = e.target.value.toString()
 
       const inputYear = document.getElementById('selectedAppointmentYear')
