@@ -12,6 +12,7 @@ export default function App() {
   const [barbershopsList, setBarbershopsList] = useState(null);
   const [barbershopsListOriginal, setBarbershopsListOriginal] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [services, setServices] = useState(null);
   
   const breadcrumbItems = [
     {
@@ -25,11 +26,14 @@ export default function App() {
     async function getBarbershops() {
       try {
         setIsLoading(true);
-        const response = await axiosInstance.get(`/barbearia/`);
+        const responseBarbershop = await axiosInstance.get(`/barbearia/`);
+        const responseServices = await axiosInstance.get(`/servico/`);
+        setServices(responseServices.data)
         // Verifica se a resposta contém os dados esperados
-        if (response.data) {
-          setBarbershopsList(response.data);
-          setBarbershopsListOriginal(response.data);
+        if (responseBarbershop.data) {
+          console.log(responseBarbershop.data)
+          setBarbershopsList(responseBarbershop.data);
+          setBarbershopsListOriginal(responseBarbershop.data);
 
           setIsLoading(false);
         } else {
@@ -50,7 +54,21 @@ export default function App() {
     if(filter === ''){
       setBarbershopsList(barbershopsListOriginal)
     } else {
-      const filteredBarbershopList = barbershopsListOriginal.filter(barbershop => barbershop.nomeBarbearia.includes(filter));
+      let filteredBarbershopList = barbershopsListOriginal.filter(barbershop => barbershop.nomeBarbearia.includes(filter));
+
+      if(filteredBarbershopList.length === 0) {
+        const filteredServicesList = services.filter(service => service.nome.includes(filter))
+        let barbershopsWithService = []
+        let hashBarbershops = []
+        for (let service of filteredServicesList) {
+          if(!hashBarbershops.includes(service.barbearia.nomeBarbearia)){
+            barbershopsWithService.push(service.barbearia);
+            hashBarbershops.push(service.barbearia.nomeBarbearia);
+          }
+        }
+
+        filteredBarbershopList = barbershopsWithService;
+      }
 
       setBarbershopsList(filteredBarbershopList);
     }
@@ -70,7 +88,7 @@ export default function App() {
     <>
       <HeadingContainer breadcrumbItems={breadcrumbItems} title={'Barbearias'}>
         <InputGroup>
-          <Input id='searchBarbershopsHome' placeholder='Buscar' className='heading-search-input' onKeyDown={handleKeyDown}/>
+          <Input id='searchBarbershopsHome' placeholder='Buscar barbearias e serviços' className='heading-search-input' onKeyDown={handleKeyDown}/>
           <InputRightAddon className='heading-search-input-right-buttons'>
             
             <Select variant='filled' placeholder='Serviço'>

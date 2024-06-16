@@ -127,7 +127,6 @@ function AppointmentItem({appointment}) {
                 <Box>
                     <Heading size='lg'>{appointment?.servico.nome}</Heading>
                     <Text py='2'>
-                      {/* TODO: tentar arrumar erro de não adicionar nome ao cadastrar usuário */}
                         {appointment?.usuario?.nome}
                     </Text>
                 </Box>
@@ -261,8 +260,6 @@ export default function BarberAppointmentList() {
         handleGetAppointments()
 
       }, [])
-
-    // TODO: pegar nome serviço para colocar na listagem de agendamentos da barbearia 
 
     return (
         <>

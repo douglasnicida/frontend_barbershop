@@ -102,7 +102,6 @@ export default function UserBarbershopEdit() {
     }
   }
 
-// TODO: fazer requisição para editar barbearia
   useEffect(() => {
     handleFindBarbershop()
   }, [])
