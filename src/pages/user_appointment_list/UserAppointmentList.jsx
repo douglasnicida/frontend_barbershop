@@ -193,19 +193,22 @@ export default function UserAppointmentList() {
             }
 
             {
-              (appointments && !isLoading) ?
+              (appointments && !isLoading) &&
               appointments.map((appointment) => {
                 return (
                   (appointment) &&
                   <AppointmentItem key={appointment?.id} appointment={appointment} />
                 )
               })
-              :
+            }
+
+            
+                
+            </div>
+            {
               (!isLoading) &&
               <h1>Nenhum agendamento realizado.</h1>
             }
-                
-            </div>
         </ContentContainer>
         </>
     )

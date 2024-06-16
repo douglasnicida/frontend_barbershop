@@ -285,20 +285,21 @@ export default function BarberAppointmentList() {
 
 
               {
-                (appointments && !isLoading) ?
+                (!isLoading && appointments) &&
                 appointments.map((appointment) => {
                   return (
                     (appointment) &&
                     <AppointmentItem key={appointment.id} appointment={appointment}/>
                   )
                 })
-                :
-                !appointments &&
-                <h1>Nenhuma agendamento para mostrar</h1>
               }
 
                 
             </div>
+              {
+                (!isLoading) &&
+                <h1>Nenhuma agendamento para mostrar</h1>
+              }
         </ContentContainer>
         </>
     )

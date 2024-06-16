@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, FormLabel, Heading, Input, SimpleGrid, Text, Tooltip } from "@chakra-ui/react";
+import { Box, Button, FormControl, FormLabel, Heading, Input, SimpleGrid, Skeleton, Stack, Text, Tooltip } from "@chakra-ui/react";
 import ContentContainer from "../../components/contentContainer/ContentContainer";
 import HeadingContainer from "../../components/heading/Heading";
 import { useNavigate, useParams } from "react-router-dom";
@@ -144,8 +144,18 @@ export default function UserBarbershopEdit() {
           <Button colorScheme='purple' marginTop={5} onClick={handleUpdateBarbershop}>Concluir edição</Button>
         </Tooltip>
 
-            {
-                (!isLoadingService && services?.length > 0) ?
+        <Heading className='service-card-service-title' marginTop={10}>Serviços</Heading>
+              {
+                (isLoadingService) &&
+                <Stack>
+                  <Skeleton height='20px' />
+                  <Skeleton height='20px' />
+                  <Skeleton height='20px' />
+                </Stack>
+              }
+
+              {
+                (!isLoadingService && services?.length > 0) &&
                 <SimpleGrid spacing={4} templateColumns='repeat(auto-fill, minmax(270px, 1fr))' marginTop={10}>
                     {services?.map(service => {
                         return (
@@ -153,13 +163,13 @@ export default function UserBarbershopEdit() {
                         )
                     })}
                 </SimpleGrid>
-                :
+              }
+              {
+                (!isLoadingService && services?.length === 0) &&
                 <>
-                    <Heading className='service-card-service-title' marginTop={10}>Serviços</Heading>
                     <Text textAlign={'center'}>Esta barbearia ainda não possui serviços cadastrados.</Text>
                 </>
-                
-            }
+              }
             <Box marginTop={10}>
                 <ServiceDrawer />
             </Box>
