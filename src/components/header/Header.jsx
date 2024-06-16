@@ -108,10 +108,9 @@ function SignUpModal() {
         }
 
         const body = {
-            "id": "",
             "nome": name,
-            "email": login,
-            "senha": password,
+            "login": login,
+            "password": password,
             "role": "USER"
         }
 
