@@ -63,17 +63,15 @@ export default function App() {
   }
 
 
+// TODO: fazer funcionamento de filtro por serviço
+// TODO: adicionar imagens a barbearia e serviço
+
   return (
     <>
       <HeadingContainer breadcrumbItems={breadcrumbItems} title={'Barbearias'}>
         <InputGroup>
           <Input id='searchBarbershopsHome' placeholder='Buscar' className='heading-search-input' onKeyDown={handleKeyDown}/>
           <InputRightAddon className='heading-search-input-right-buttons'>
-            <Select variant='filled' placeholder='Cidade'>
-              <option value='option1'>Rio Claro</option>
-              <option value='option1'>Piracicaba</option>
-              <option value='option1'>Campinas</option>
-            </Select>
             
             <Select variant='filled' placeholder='Serviço'>
               <option value='option1'>Corte masculino</option>
@@ -111,6 +109,7 @@ export default function App() {
                 )
               })
               :
+              (!isLoading) &&
               <h1>Nenhuma barbearia cadastrada.</h1>
             }
           </SimpleGrid>

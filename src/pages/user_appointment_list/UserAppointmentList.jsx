@@ -138,7 +138,7 @@ function AppointmentItem({appointment}) {
 
 export default function UserAppointmentList() {
     const [appointments, setAppointments] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     let user = -1;
 
     const breadcrumbItems = [
@@ -201,7 +201,7 @@ export default function UserAppointmentList() {
                 )
               })
               :
-              !appointments &&
+              (!isLoading) &&
               <h1>Nenhum agendamento realizado.</h1>
             }
                 

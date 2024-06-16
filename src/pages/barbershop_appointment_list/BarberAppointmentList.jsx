@@ -109,6 +109,7 @@ function AppointmentItem({appointment}) {
 
     }, [])
 
+
     return (
         <Card
         direction={{ base: 'column', sm: 'row' }}
@@ -124,7 +125,7 @@ function AppointmentItem({appointment}) {
         <Stack className='appointment-card-box'>
             <CardBody className='appointment-card-info'>
                 <Box>
-                    <Heading size='lg'>Nome Serviço</Heading>
+                    <Heading size='lg'>{appointment?.servico.nome}</Heading>
                     <Text py='2'>
                       {/* TODO: tentar arrumar erro de não adicionar nome ao cadastrar usuário */}
                         {appointment?.usuario?.nome}
@@ -261,9 +262,11 @@ export default function BarberAppointmentList() {
 
       }, [])
 
+    // TODO: pegar nome serviço para colocar na listagem de agendamentos da barbearia 
+
     return (
         <>
-        <HeadingContainer breadcrumbItems={breadcrumbItems} title={`Agendamentos ${barbershop?.nomeBarbearia}`}>
+        <HeadingContainer breadcrumbItems={breadcrumbItems} title={`Agendamentos ${(barbershop?.nomeBarbearia) ? barbershop.nomeBarbearia : ''}`}>
           <Box display={'flex'} gap={2} alignItems={'center'} marginTop={5}>
             <Button colorScheme='purple' onClick={() => {navigate(`/minhas_barbearias/barbearia/${id}/edit`)}}>Editar barbearia</Button>
             <DeleteBarbershopButton id={id}/>

@@ -62,7 +62,7 @@ export default function ServiceCard({service, hasDeleteButton}) {
             <Stack mt="6" spacing="3" paddingX={5}>
                 
               <Heading size="sm" className='card-service-label'>Serviço</Heading>
-              <Heading size="md">{service?.nome}</Heading>
+              <Heading size="md" height={"48px"}>{service?.nome}</Heading>
               <Text className='card-service-details'>{service?.descricao}</Text>
 
               <Tag className='service-card-price'>R${service?.preco},00</Tag>

@@ -120,10 +120,6 @@ export default function UserBarbershopEdit() {
         breadcrumbItems={breadcrumbItems}
         title={`Editar ${barbershop?.nomeBarbearia}`}
       >
-        <Tooltip label='Este botão consolidará apenas a ação de edição do nome e do endereço da barbearia. 
-        As ações dos serviços já são consolidados logo após a ação!' padding={4} borderRadius={10}>
-          <Button colorScheme='purple' onClick={handleUpdateBarbershop}>Concluir edição</Button>
-        </Tooltip>
       </HeadingContainer>
 
       <ContentContainer>
@@ -142,6 +138,11 @@ export default function UserBarbershopEdit() {
             placeholder="Digite o novo endereço da barbearia"
           />
         </FormControl>
+
+        <Tooltip label='Este botão consolidará apenas a ação de edição do nome e do endereço da barbearia. 
+        As ações dos serviços já são consolidados logo após a ação!' padding={4} borderRadius={10}>
+          <Button colorScheme='purple' marginTop={5} onClick={handleUpdateBarbershop}>Concluir edição</Button>
+        </Tooltip>
 
             {
                 (!isLoadingService && services?.length > 0) ?
