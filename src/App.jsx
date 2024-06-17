@@ -80,7 +80,6 @@ export default function App() {
     }
   }
 
-// TODO: adicionar imagens a barbearia e serviço
 // TODO: fazer página edição do perfil
 
   return (
@@ -89,13 +88,6 @@ export default function App() {
         <InputGroup>
           <Input id='searchBarbershopsHome' placeholder='Buscar barbearias e serviços' className='heading-search-input' onKeyDown={handleKeyDown}/>
           <InputRightAddon className='heading-search-input-right-buttons'>
-            
-            <Select variant='filled' placeholder='Serviço'>
-              <option value='option1'>Corte masculino</option>
-              <option value='option1'>Corte feminino</option>
-              <option value='option1'>Barba</option>
-              <option value='option1'>Tingir cabelo</option>
-            </Select>
             <IconButton
               aria-label='Buscar barbearias'
               icon={<IoMdSearch size={23} />}

@@ -5,11 +5,11 @@ import { Avatar, AvatarGroup, Button, FormControl, FormLabel, Input, Menu, MenuB
 import { useEffect, useRef, useState } from "react";
 import { IoCalendarOutline } from "react-icons/io5";
 import { BsScissors } from "react-icons/bs";
-import { LiaUserEditSolid } from "react-icons/lia";
 import { PiSignOut } from "react-icons/pi";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import UserEdit from "../../pages/user_edit/UserEdit";
 
 function MyMenuItem({children, onClick}) {
     return (
@@ -175,7 +175,6 @@ export default function Header() {
     const [isLogged, setIsLogged] = useState(false);
     const navigate = useNavigate();
 
-
     useEffect(() => {
         const token = localStorage.getItem('token');
 
@@ -205,10 +204,7 @@ export default function Header() {
             {
                 (isLogged) ?
                 <MenuList>
-                    <MyMenuItem>
-                        <LiaUserEditSolid size={20} />
-                        Editar perfil
-                    </MyMenuItem>
+                    <UserEdit />
                     <a href="/meus_agendamentos">
                         <MyMenuItem>
                             <IoCalendarOutline size={20}/>
