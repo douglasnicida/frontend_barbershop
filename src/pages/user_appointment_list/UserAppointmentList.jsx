@@ -206,7 +206,7 @@ export default function UserAppointmentList() {
                 
             </div>
             {
-              (!isLoading) &&
+              (!isLoading && appointments?.length === 0) &&
               <h1>Nenhum agendamento realizado.</h1>
             }
         </ContentContainer>
