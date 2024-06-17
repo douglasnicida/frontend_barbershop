@@ -52,11 +52,12 @@ export default function ServiceCard({service, hasDeleteButton}) {
       }
     }
 
+    const imgFallback = "https://lh3.googleusercontent.com/proxy/0xBM0IzhQ1y6K59xf8W-Ft3j6KDgOuirePxWTxMX7tNWCa1OHq-8S--WNmMTN_sfNObgxa9f70V0NO7OegMkjyIaJy-phN_7SOob6QgCPaZyEEtJMKcIyK0z0yonZZm534AyKd6d0o9rFDXSDq4_yrmmsw"
+
     return (
         <Card className='service-card' maxW={'sm'} position={'relative'}>
             <Image
-              src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-              alt="Green double couch with wooden legs"
+              src={(service?.imagem) ? service?.imagem : imgFallback}
               className='service-card-image'
             />
             <Stack mt="6" spacing="3" paddingX={5}>

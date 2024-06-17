@@ -80,9 +80,8 @@ export default function App() {
     }
   }
 
-
-// TODO: fazer funcionamento de filtro por serviço
 // TODO: adicionar imagens a barbearia e serviço
+// TODO: fazer página edição do perfil
 
   return (
     <>

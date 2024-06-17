@@ -15,6 +15,7 @@ function CreateBarbershopButton() {
   async function handleCreatebarbershop(){
       const name = document.getElementById('create-barbershop-name').value;
       const address = document.getElementById('create-barbershop-address').value;
+      const image = document.getElementById('create-barbershop-image').value;
       let user = 0;
       
 
@@ -26,7 +27,7 @@ function CreateBarbershopButton() {
       }
 
 
-      if(!name || !address|| !user){
+      if(!name || !address|| !user || !image){
           toast.error('Há informações obrigatórias não preenchidas')
           return;
       }
@@ -34,6 +35,7 @@ function CreateBarbershopButton() {
       const body = {
         "nomeBarbearia": name,
         "endereco": address,
+        "imagem": image,
         "usuario_id": user.data
       }
 
@@ -69,6 +71,11 @@ function CreateBarbershopButton() {
                 <FormControl mt={4}>
                   <FormLabel>Endereço barbearia*</FormLabel>
                   <Input id='create-barbershop-address' placeholder='Digite endereço da barbearia' />
+                </FormControl>
+
+                <FormControl mt={4}>
+                  <FormLabel>Imagem Barbearia*</FormLabel>
+                  <Input id='create-barbershop-image' placeholder='Digite a url da imagem desejada.' />
                 </FormControl>
             </ModalBody>
 

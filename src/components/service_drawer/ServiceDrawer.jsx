@@ -18,12 +18,14 @@ export default function ServiceDrawer() {
         const description = document.getElementById('create-service-description');
         const price = document.getElementById('create-service-price');
         const time = document.getElementById('create-service-time');
+        const image = document.getElementById('create-service-image');
 
-        if(name.value === '' || description.value === '' || price.value === '' || time.value === ''){
+        if(name.value === '' || description.value === '' || price.value === '' || time.value === '' || image.value === ''){
           if(time.value === '') { time.focus();}
           if(price.value === '') { price.focus();}
           if(description.value === '') {description.focus();}
           if(name.value === '') {; name.focus();}
+          if(image.value === '') {; image.focus();}
           toast.warn('Preencha todos os campos obrigatórios(*).');
         } else {
           const body = {
@@ -31,6 +33,7 @@ export default function ServiceDrawer() {
             "preco": price.value,
             "tempoServicoMinutos": price.value,
             "descricao": description.value,
+            "imagem": image.value,
             "barbearia_id": id
           }
   
@@ -104,6 +107,14 @@ export default function ServiceDrawer() {
                     <Input
                       id="create-service-time"
                       placeholder="Ex: 30 (valor em minutos)"
+                    />
+                  </FormControl>
+
+                  <FormControl mt={4}>
+                    <FormLabel>Imagem serviço*</FormLabel>
+                    <Input
+                      id="create-service-image"
+                      placeholder="Ex: https://link.com.br/nomeImagem.jpg"
                     />
                   </FormControl>
                 </Box>

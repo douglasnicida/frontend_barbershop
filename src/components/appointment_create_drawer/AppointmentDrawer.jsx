@@ -131,7 +131,7 @@ export default function AppointmentDrawer({service}) {
 
                     <div className="box boxYear">
                       <FormLabel>Ano</FormLabel>
-                      <Input id='selectedAppointmentYear' className='appointment-input'/>
+                      <Input id='selectedAppointmentYear' className='appointment-input' contentEditable={false}/>
                     </div>
                   </InputGroup>
 
