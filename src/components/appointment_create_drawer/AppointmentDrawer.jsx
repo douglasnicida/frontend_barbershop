@@ -121,28 +121,28 @@ export default function AppointmentDrawer({service}) {
                   <InputGroup className='date-container'>
                     <div className="box boxDay">
                       <FormLabel>Dia</FormLabel>
-                      <Input id='selectedAppointmentDay' className='appointment-input'/>
+                      <Input id='selectedAppointmentDay' className='appointment-input' disabled/>
                     </div>
 
                     <div className="box boxMonth">
                       <FormLabel>Mês</FormLabel>
-                      <Input id='selectedAppointmentMonth' className='appointment-input'/>
+                      <Input id='selectedAppointmentMonth' className='appointment-input' disabled/>
                     </div>
 
                     <div className="box boxYear">
                       <FormLabel>Ano</FormLabel>
-                      <Input id='selectedAppointmentYear' className='appointment-input' contentEditable={false}/>
+                      <Input id='selectedAppointmentYear' className='appointment-input' disabled/>
                     </div>
                   </InputGroup>
 
                   <InputGroup className='time-container'>
                     <div className="box">
                       <FormLabel>Hora</FormLabel>
-                      <Input id='selectedAppointmentHour' className='appointment-input'/>
+                      <Input id='selectedAppointmentHour' className='appointment-input' disabled/>
                     </div>
                     <div className="box">
                       <FormLabel>Minuto</FormLabel>
-                      <Input id='selectedAppointmentMinutes' className='appointment-input'/>
+                      <Input id='selectedAppointmentMinutes' className='appointment-input' disabled />
                     </div>
                   </InputGroup>
                 </Box>

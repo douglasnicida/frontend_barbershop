@@ -61,6 +61,7 @@ function AppointmentItem({appointment}) {
     const nomeBarbeariaAgendamento = appointment?.barbearia.nomeBarbearia;
     const nomeServicoAgendamento = appointment?.servico.nome;
     const precoServicoAgendamento = appointment?.servico.preco;
+    const imagemAgendamento = appointment?.servico.imagem;
     let dataAgendamento = 0;
     let timeAgendamento = 0;
     
@@ -103,8 +104,7 @@ function AppointmentItem({appointment}) {
         <Image
             objectFit='cover'
             maxW={{ base: '100%', sm: '200px' }}
-            src='https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60'
-            alt='Caffe Latte'
+            src={imagemAgendamento}
         />
 
         <Stack className='appointment-card-box'>
