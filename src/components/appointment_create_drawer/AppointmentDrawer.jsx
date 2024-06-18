@@ -62,6 +62,14 @@ export default function AppointmentDrawer({service}) {
       
       if(!user || !barbershop_id || !dateTime || !service?.id){
         toast.error('Há campos obrigatórios não preenchidos.')
+        return;
+      }
+
+      const dateTimeObject = new Date(dateTime)
+      const today = new Date()
+      if(dateTimeObject < today) {
+        toast.error('Não é possível criar um agendamento com data anterior a atual.')
+        return;
       }
 
       const body = {

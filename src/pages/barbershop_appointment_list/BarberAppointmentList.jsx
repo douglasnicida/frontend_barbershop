@@ -7,54 +7,25 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axiosInstance from '../../utils/axiosConfig';
 import { toast } from 'react-toastify';
 
-function AppointmentCancelButton() {
-    const { isOpen, onOpen, onClose } = useDisclosure()
-    const cancelRef = useRef()
-  
-    return (
-      <>
-        <Button colorScheme='red' onClick={onOpen}>
-          Cancelar
-        </Button>
-  
-        <AlertDialog
-          isOpen={isOpen}
-          leastDestructiveRef={cancelRef}
-          onClose={onClose}
-        >
-          <AlertDialogOverlay>
-            <AlertDialogContent>
-              <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                Cancelamento de Agendamento
-              </AlertDialogHeader>
-  
-              <AlertDialogBody>
-                Confirmar cancelamento do agendamento?
-              </AlertDialogBody>
-  
-              <AlertDialogFooter>
-                <Button ref={cancelRef} onClick={onClose}>
-                  Voltar
-                </Button>
-                <Button colorScheme='red' onClick={onClose} ml={3}>
-                  Sim
-                </Button>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialogOverlay>
-        </AlertDialog>
-      </>
-    )
-}
-
-function AppointmentConcludedButton() {
+function AppointmentCancelButton({appointmentID, isDisabled}) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const cancelRef = useRef()
 
+  async function handleDeleteAppointment() {
+    try {
+      await axiosInstance.delete(`/agendamento/${appointmentID}`);
+      toast.success('Agendamento cancelado com sucesso!');
+      onClose();
+      setTimeout(window.location.reload(),2000)
+    } catch (e){
+      toast.error('Não foi possível cancelar este agendamento!');
+    }
+  }
+
   return (
     <>
-      <Button colorScheme='green' onClick={onOpen}>
-        Concluído
+      <Button colorScheme='red' onClick={onOpen} isDisabled={isDisabled}>
+        Cancelar
       </Button>
 
       <AlertDialog
@@ -65,19 +36,19 @@ function AppointmentConcludedButton() {
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-              Conclusão de Agendamento
+              Cancelamento de Agendamento
             </AlertDialogHeader>
 
             <AlertDialogBody>
-              Confirmar que o serviço do agendamento foi concluído?
+              Confirmar cancelamento do agendamento?
             </AlertDialogBody>
 
             <AlertDialogFooter>
               <Button ref={cancelRef} onClick={onClose}>
                 Voltar
               </Button>
-              <Button colorScheme='green' onClick={onClose} ml={3}>
-                Sim
+              <Button colorScheme='red' onClick={handleDeleteAppointment} ml={3}>
+                Confirmar
               </Button>
             </AlertDialogFooter>
           </AlertDialogContent>
@@ -88,26 +59,53 @@ function AppointmentConcludedButton() {
 }
 
 function AppointmentItem({appointment}) {
-    const [date, setDate] = useState(null);
-    const [time, setTime] = useState(null);
 
-    function doubleDigits(value) {
-      return (value < 10) ? `0${value}` : value;
-    }
+    const [isConcluded, setIsConcluded] = useState(false);
     
-    useEffect(() => {
-      const date = new Date(appointment?.data);
-      
-      const hora = doubleDigits(date.getHours());
-      const minutos = doubleDigits(date.getMinutes());
-      const dia = doubleDigits(date.getDay());
-      const mes = doubleDigits(date.getMonth());
-      const ano = doubleDigits(date.getFullYear());
-      
-      setDate(`${dia}/${mes}/${ano}`);
-      setTime(`${hora}:${minutos}`);
+    let unformattedDate = new Date(appointment?.data)
+    let today = new Date();
+    
+    let dataAgendamento = 0;
+    let timeAgendamento = 0;
 
+    const data_string = new Date(appointment?.data).toUTCString();
+      
+    const dateAtt = new Date(data_string);
+
+    const options = {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+      timeZone: 'UTC'
+    };
+  
+    const formattedDate = new Intl.DateTimeFormat('pt-BR', options).format(dateAtt);
+
+    const data_split = formattedDate.split(', ');
+    const data_att = data_split[0].split('/')
+    const dia = data_att[0]
+    const mes = data_att[1]
+    const ano = data_att[2]
+    
+    const data_att2 = data_split[1].split(':')
+    const hora = data_att2[0]
+    const minutos = data_att2[1]
+      
+    
+    dataAgendamento = `${dia}/${mes}/${ano}`;
+    timeAgendamento = `${hora}:${minutos}`;
+
+    today = today.getTime() - 10800000
+    unformattedDate = unformattedDate.getTime()
+    useEffect(() => {
+      if(today > unformattedDate) {setIsConcluded(true);}
     }, [])
+
+    
 
 
     return (
@@ -133,11 +131,11 @@ function AppointmentItem({appointment}) {
 
                 <Box className='appointment-card-datetime'>
                     <Box className='appointment-card-date'>
-                        <span>Data:</span><Text>{date}</Text>
+                        <span>Data:</span><Text>{dataAgendamento}</Text>
                     </Box>
 
                     <Box className='appointment-card-time'>
-                        <span>Hora:</span><Text>{time}</Text>
+                        <span>Hora:</span><Text>{timeAgendamento}</Text>
                     </Box>
 
                     <Tag marginTop={2} className='service-card-price'>R$20,00</Tag>
@@ -147,8 +145,9 @@ function AppointmentItem({appointment}) {
             </CardBody>
 
             <CardFooter className='appointment-card-footer'>
-                <AppointmentCancelButton />
-                <AppointmentConcludedButton />
+                <AppointmentCancelButton appointmentID={appointment.id} isDisabled={isConcluded}/>
+                {/* se passou a data e hora do agendamento, ele será marcado como concluído */}
+                {isConcluded && <Button colorScheme='green' isDisabled>Concluído</Button>}
             </CardFooter>
         </Stack>
         </Card>
@@ -286,7 +285,7 @@ export default function BarberAppointmentList() {
                 appointments.map((appointment) => {
                   return (
                     (appointment) &&
-                    <AppointmentItem key={appointment.id} appointment={appointment}/>
+                    <AppointmentItem key={appointment?.id} appointment={appointment}/>
                   )
                 })
               }
@@ -294,7 +293,7 @@ export default function BarberAppointmentList() {
                 
             </div>
               {
-                (!isLoading) &&
+                (!isLoading && appointments.length === 0) &&
                 <h1>Nenhuma agendamento para mostrar</h1>
               }
         </ContentContainer>
